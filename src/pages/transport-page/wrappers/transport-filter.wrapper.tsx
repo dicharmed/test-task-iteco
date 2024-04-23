@@ -6,6 +6,7 @@ import {
 } from "../components/transport-filter.component";
 
 import { useSearchParams } from "react-router-dom";
+import { getFormattedDate } from "../../../utils";
 
 export const TransportFilterWrapper: React.FC = (): React.ReactElement => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -31,6 +32,7 @@ export const TransportFilterWrapper: React.FC = (): React.ReactElement => {
     const newSearchParams = new URLSearchParams();
 
     Object.entries(values).forEach(([key, value]) => {
+      if (key === "date") value = value ? getFormattedDate(value) : value;
       if (value) {
         newSearchParams.set(key, value);
       }

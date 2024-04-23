@@ -1,10 +1,8 @@
 import * as React from "react";
-import { TransportFilterWrapper } from "./transport-page/wrappers/transport-filter.wrapper";
 import { useQuery } from "@tanstack/react-query";
-import { API } from "../API/transportation-api";
 import { useSearchParams } from "react-router-dom";
-import { TransportCardComponent } from "./transport-page/components/transport-card.component";
-import { Spin } from "antd";
+import { TransportPageComponent } from "./components/transport-page.component";
+import { API } from "../../API/transportation-api";
 
 export const TransportPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -29,20 +27,5 @@ export const TransportPage: React.FC = () => {
     return <div>Error!!!</div>;
   }
 
-  return (
-    <>
-      <TransportFilterWrapper />
-      <TransportCardComponent />
-      {isLoading ? (
-        <Spin tip="Loading">
-          <div className="content" />
-        </Spin>
-      ) : (
-        <>
-          <div>Transport List...</div>
-          <pre>{JSON.stringify(data, null, 2)}</pre>
-        </>
-      )}
-    </>
-  );
+  return <TransportPageComponent data={data} isLoading={isLoading} />;
 };
