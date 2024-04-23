@@ -10,18 +10,6 @@ import { useSearchParams } from "react-router-dom";
 export const TransportFilterWrapper: React.FC = (): React.ReactElement => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const queryStringChange = (values: FilterValues) => {
-    const newSearchParams = new URLSearchParams();
-
-    Object.entries(values).forEach(([key, value]) => {
-      if (value) {
-        newSearchParams.set(key, value);
-      }
-    });
-
-    setSearchParams(newSearchParams);
-  };
-
   const formik = useFormik<FilterValues>({
     initialValues: {
       from: searchParams.get("from"),
@@ -34,11 +22,29 @@ export const TransportFilterWrapper: React.FC = (): React.ReactElement => {
     },
   });
 
+  const handleResetForm = (e: React.FormEvent) => {
+    formik.handleReset(e);
+    formik.setFieldValue("date", "");
+    setSearchParams({});
+  };
+  const queryStringChange = (values: FilterValues) => {
+    const newSearchParams = new URLSearchParams();
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        newSearchParams.set(key, value);
+      }
+    });
+
+    setSearchParams(newSearchParams);
+  };
+
   return (
     <TransportFilterComponent
       values={formik.values}
       handleSubmit={formik.handleSubmit}
       handleChange={formik.handleChange}
+      handleReset={handleResetForm}
       handleDatePickerChange={(date) => formik.setFieldValue("date", date)}
     />
   );

@@ -3,6 +3,8 @@ import { TransportFilterWrapper } from "./transport-page/wrappers/transport-filt
 import { useQuery } from "@tanstack/react-query";
 import { API } from "../API/transportation-api";
 import { useSearchParams } from "react-router-dom";
+import { TransportCardComponent } from "./transport-page/components/transport-card.component";
+import { Spin } from "antd";
 
 export const TransportPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -30,8 +32,11 @@ export const TransportPage: React.FC = () => {
   return (
     <>
       <TransportFilterWrapper />
+      <TransportCardComponent />
       {isLoading ? (
-        <div>Loading...</div>
+        <Spin tip="Loading">
+          <div className="content" />
+        </Spin>
       ) : (
         <>
           <div>Transport List...</div>

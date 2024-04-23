@@ -63,12 +63,14 @@ type Props = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement> | undefined) => void;
   handleChange: (e: React.ChangeEvent) => void;
   handleDatePickerChange: (date: unknown) => void;
+  handleReset: (e: React.FormEvent) => void;
   values: FilterValues;
 };
 export const TransportFilterComponent: React.FC<Props> = ({
   handleSubmit,
   handleChange,
   handleDatePickerChange,
+  handleReset,
   values,
 }): React.ReactElement => {
   const { transportationNumber, from, to, date } = values;
@@ -110,7 +112,7 @@ export const TransportFilterComponent: React.FC<Props> = ({
         />
 
         <Flex justify="flex-end">
-          <ButtonLink type="link" htmlType="button">
+          <ButtonLink type="link" htmlType="button" onClick={handleReset}>
             <Text type="secondary" underline>
               Сбросить фильтры
             </Text>
