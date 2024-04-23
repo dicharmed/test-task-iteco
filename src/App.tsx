@@ -1,11 +1,13 @@
 import "./App.css";
-import { TransportFilter } from "./features/transport-filter/transport-filter";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TransportPage } from "./pages/transport-page.component";
 
+const queryClient = new QueryClient();
 function App() {
   return (
-    <>
-      <TransportFilter />
-    </>
+    <QueryClientProvider client={queryClient}>
+      <TransportPage />
+    </QueryClientProvider>
   );
 }
 

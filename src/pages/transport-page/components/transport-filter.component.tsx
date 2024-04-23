@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Card, DatePicker, Flex, Input, Typography } from "antd";
 import SwapIcon from "../../../assets/swap-icon.svg?react";
 import styled from "styled-components";
+import dayjs from "dayjs";
 const { Title, Text } = Typography;
 
 const CardContent = styled.form`
@@ -52,15 +53,17 @@ const ButtonLink = styled(Button)`
   padding: 0;
 `;
 
+export type FilterValues = {
+  from: string | null;
+  to: string | null;
+  transportationNumber: string | null;
+  date: string | null;
+};
 type Props = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement> | undefined) => void;
   handleChange: (e: React.ChangeEvent) => void;
   handleDatePickerChange: (date: unknown) => void;
-  values: {
-    from: string;
-    to: string;
-    orderNumber: string;
-  };
+  values: FilterValues;
 };
 export const TransportFilterComponent: React.FC<Props> = ({
   handleSubmit,
@@ -68,15 +71,16 @@ export const TransportFilterComponent: React.FC<Props> = ({
   handleDatePickerChange,
   values,
 }): React.ReactElement => {
-  const { orderNumber, from, to } = values;
+  const { transportationNumber, from, to, date } = values;
+
   return (
     <Card>
       <CardContent onSubmit={handleSubmit}>
         <TitleStyled level={4}>Поиск грузов</TitleStyled>
         <InputStyled
-          name="orderNumber"
+          name="transportationNumber"
           placeholder="№ заказа"
-          value={orderNumber}
+          value={transportationNumber || ""}
           onChange={handleChange}
         />
 
@@ -85,7 +89,7 @@ export const TransportFilterComponent: React.FC<Props> = ({
             name="from"
             $borderColor="green"
             placeholder="Откуда"
-            value={from}
+            value={from || ""}
             onChange={handleChange}
           />
           <SwapIconBtn shape="circle" icon={<SwapIcon />} />
@@ -94,13 +98,14 @@ export const TransportFilterComponent: React.FC<Props> = ({
             $borderColor="green"
             placeholder="Куда"
             $paddingLeft="20px"
-            value={to}
+            value={to || ""}
             onChange={handleChange}
           />
         </InputGroup>
         <DatePickerStyled
           name="date"
           placeholder="Дата погрузки"
+          defaultValue={date ? dayjs(date) : ""}
           onChange={(date) => handleDatePickerChange(date)}
         />
 
