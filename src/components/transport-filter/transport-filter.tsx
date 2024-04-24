@@ -1,72 +1,19 @@
 import React from "react";
 import { Button, Card, DatePicker, Flex, Input, Typography } from "antd";
-import SwapIcon from "../../../assets/swap-icon.svg?react";
+import SwapIcon from "../../assets/swap-icon.svg?react";
 import styled from "styled-components";
 import dayjs from "dayjs";
+import { FilterValuesType } from "./transport-filter.types";
 const { Title, Text } = Typography;
 
-const CardContent = styled.form`
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: repeat(3, 48px);
-  justify-content: space-between;
-  align-items: center;
-  grid-gap: 15px 10px;
-`;
-const TitleStyled = styled(Title)`
-  text-align: left;
-`;
-
-const InputStyled = styled(Input)<{
-  $borderColor?: string;
-  $paddingLeft?: string;
-}>`
-  height: 48px;
-  padding-left: ${(props) => props.$paddingLeft || "auto"};
-  border-color: ${(props) => props.$borderColor || "#d9d9d9"};
-`;
-
-const DatePickerStyled = styled(DatePicker)`
-  height: 100%;
-`;
-
-const SearchBtn = styled(Button)`
-  height: 100%;
-  background-color: #ff9a19;
-  border-color: #ff9a19;
-  text-transform: uppercase;
-  font-size: 16px;
-  color: white;
-`;
-const InputGroup = styled(Flex)`
-  position: relative;
-  align-items: center;
-`;
-const SwapIconBtn = styled(Button)`
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-57%, -50%);
-  z-index: 1;
-`;
-const ButtonLink = styled(Button)`
-  padding: 0;
-`;
-
-export type FilterValues = {
-  from: string | null;
-  to: string | null;
-  transportationNumber: string | null;
-  date: string | null;
-};
 type Props = {
   handleSubmit: (e: React.FormEvent<HTMLFormElement> | undefined) => void;
   handleChange: (e: React.ChangeEvent) => void;
   handleDatePickerChange: (date: unknown) => void;
-  handleReset: (e: React.FormEvent) => void;
-  values: FilterValues;
+  handleReset: (e: React.FormEvent<HTMLFormElement>) => void;
+  values: FilterValuesType;
 };
-export const TransportFilterComponent: React.FC<Props> = ({
+export const TransportFilter: React.FC<Props> = ({
   handleSubmit,
   handleChange,
   handleDatePickerChange,
@@ -77,7 +24,7 @@ export const TransportFilterComponent: React.FC<Props> = ({
 
   return (
     <Card>
-      <CardContent onSubmit={handleSubmit}>
+      <CardContent onSubmit={handleSubmit} onReset={handleReset}>
         <TitleStyled level={4}>Поиск грузов</TitleStyled>
         <InputStyled
           name="transportationNumber"
@@ -107,12 +54,12 @@ export const TransportFilterComponent: React.FC<Props> = ({
         <DatePickerStyled
           name="date"
           placeholder="Дата погрузки"
-          defaultValue={date ? dayjs(date) : ""}
+          value={date ? dayjs(date) : ""}
           onChange={(date) => handleDatePickerChange(date)}
         />
 
         <Flex justify="flex-end">
-          <ButtonLink type="link" htmlType="button" onClick={handleReset}>
+          <ButtonLink type="link" htmlType="reset">
             <Text type="secondary" underline>
               Сбросить фильтры
             </Text>
@@ -123,3 +70,55 @@ export const TransportFilterComponent: React.FC<Props> = ({
     </Card>
   );
 };
+
+const CardContent = styled.form`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: repeat(3, 48px);
+  justify-content: space-between;
+  align-items: center;
+  grid-gap: 15px 10px;
+`;
+
+const TitleStyled = styled(Title)`
+  text-align: left;
+`;
+
+const InputStyled = styled(Input)<{
+  $borderColor?: string;
+  $paddingLeft?: string;
+}>`
+  height: 48px;
+  padding-left: ${(props) => props.$paddingLeft || "auto"};
+  border-color: ${(props) => props.$borderColor || "#d9d9d9"};
+`;
+
+const DatePickerStyled = styled(DatePicker)`
+  height: 100%;
+`;
+
+const SearchBtn = styled(Button)`
+  height: 100%;
+  background-color: #ff9a19;
+  border-color: #ff9a19;
+  text-transform: uppercase;
+  font-size: 16px;
+  color: white;
+`;
+
+const InputGroup = styled(Flex)`
+  position: relative;
+  align-items: center;
+`;
+
+const SwapIconBtn = styled(Button)`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-57%, -50%);
+  z-index: 1;
+`;
+
+const ButtonLink = styled(Button)`
+  padding: 0;
+`;

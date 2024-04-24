@@ -1,30 +1,11 @@
 import React from "react";
 import { Card, Typography } from "antd";
 import styled from "styled-components";
-import { TransportationType } from "../../../API/transportation-api";
-import { getFormattedDate, getFormattedPrice } from "../../../utils";
+import { getFormattedDate, getFormattedPrice } from "../../utils";
+import { TransportationType } from "../../types";
 const { Text } = Typography;
 
-const Content = styled("div")`
-  display: grid;
-  grid-template-columns: 2fr 3fr 1fr;
-  align-items: center;
-
-  & > div:not(:last-child) {
-    border-right: 1px solid #e7e7e7;
-  }
-`;
-
-const TextStrong = styled(Text)`
-  margin-right: 7px;
-`;
-
-const SecondColumn = styled("div")`
-  display: flex;
-  justify-content: space-evenly;
-`;
-
-export const TransportCardComponent: React.FC<TransportationType> = ({
+export const TransportCard: React.FC<TransportationType> = ({
   from,
   to,
   transportationNumber,
@@ -85,3 +66,22 @@ export const TransportCardComponent: React.FC<TransportationType> = ({
     </Card>
   );
 };
+
+const Content = styled("div")`
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr;
+  align-items: center;
+
+  & > div:not(:last-child) {
+    border-right: 1px solid #e7e7e7;
+  }
+`;
+
+const TextStrong = styled(Text)`
+  margin-right: 7px;
+`;
+
+const SecondColumn = styled("div")`
+  display: flex;
+  justify-content: space-evenly;
+`;

@@ -1,6 +1,9 @@
 import { fakerRU as faker } from "@faker-js/faker";
 
 class FakerApi {
+  getId(): string {
+    return faker.string.uuid();
+  }
   getCountry(): string {
     return faker.location.country();
   }

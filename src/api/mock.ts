@@ -1,9 +1,12 @@
-import { TransportationType } from "./API/transportation-api";
-import { FilterValues } from "./pages/transport-page/components/transport-filter.component";
-import { fakerApi } from "./API/faker-api";
+import { fakerApi } from "./faker-api";
+import { FilterValuesType } from "../components/transport-filter/transport-filter.types";
+import { TransportationType } from "../types";
 
-export const getData = (params: FilterValues): Array<TransportationType> => {
+export const getData = (
+  params: FilterValuesType,
+): Array<TransportationType> => {
   const {
+    getId,
     getCity,
     getCountry,
     getDate,
@@ -14,9 +17,9 @@ export const getData = (params: FilterValues): Array<TransportationType> => {
     getGSM,
   } = fakerApi;
   return [
-    ...Array.from({ length: 5 }, (_, x) => {
+    ...Array.from({ length: 5 }, () => {
       return {
-        index: x,
+        id: getId(),
         from: {
           country: getCountry(),
           city: params.from ?? getCity(),

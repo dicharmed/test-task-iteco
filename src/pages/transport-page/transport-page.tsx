@@ -1,31 +1,39 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
-import { TransportPageComponent } from "./components/transport-page.component";
-import { API } from "../../API/transportation-api";
+import { API } from "../../api/transportation-api";
+import { TransportFilterContainer } from "./containers/transport-filter.container";
+import { Spin } from "antd";
+import { TransportList } from "../../components/transport-list/transport-list";
+import styled from "styled-components";
+import { useSearchParamsHook } from "./hooks/useSearchParamsHook";
 
 export const TransportPage: React.FC = () => {
-  const [searchParams] = useSearchParams();
-
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
-  const transportationNumber = searchParams.get("transportationNumber");
-  const date = searchParams.get("date");
+  const [params] = useSearchParamsHook();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["data", from, to, transportationNumber, date],
-    queryFn: () =>
-      API.getTransportations({
-        from,
-        to,
-        transportationNumber,
-        date,
-      }),
+    queryKey: ["data", { ...params }],
+    queryFn: () => API.getTransportations(params),
   });
 
   if (error) {
     return <div>Error!!!</div>;
   }
 
-  return <TransportPageComponent data={data} isLoading={isLoading} />;
+  return (
+    <Wrapper>
+      <TransportFilterContainer />
+      {isLoading ? (
+        <Spin tip="Loading">
+          <div className="content" />
+        </Spin>
+      ) : (
+        data && <TransportList list={data} />
+      )}
+    </Wrapper>
+  );
 };
+
+const Wrapper = styled("div")`
+  display: grid;
+  grid-row-gap: 30px;
+`;
