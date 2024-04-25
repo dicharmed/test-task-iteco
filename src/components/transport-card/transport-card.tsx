@@ -82,6 +82,7 @@ const TextStrong = styled(Text)`
 `;
 
 const SecondColumn = styled("div")`
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 0 24px;
 `;

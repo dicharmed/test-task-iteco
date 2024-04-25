@@ -4,6 +4,7 @@ import SwapIcon from "../../assets/swap-icon.svg?react";
 import styled from "styled-components";
 import dayjs from "dayjs";
 import { FilterValuesType } from "./transport-filter.types";
+import { FilterFields } from "./constants";
 const { Title, Text } = Typography;
 
 type Props = {
@@ -21,13 +22,19 @@ export const TransportFilter: React.FC<Props> = ({
   values,
 }): React.ReactElement => {
   const { transportationNumber, from, to, date } = values;
+  const {
+    from: fromField,
+    to: toField,
+    transportationNumber: transportNumField,
+    date: dateField,
+  } = FilterFields;
 
   return (
     <Card>
       <CardContent onSubmit={handleSubmit} onReset={handleReset}>
         <TitleStyled level={4}>Поиск грузов</TitleStyled>
         <InputStyled
-          name="transportationNumber"
+          name={transportNumField}
           placeholder="№ заказа"
           value={transportationNumber || ""}
           onChange={handleChange}
@@ -35,7 +42,7 @@ export const TransportFilter: React.FC<Props> = ({
 
         <InputGroup gap="small">
           <InputStyled
-            name="from"
+            name={fromField}
             $borderColor="green"
             placeholder="Откуда"
             value={from || ""}
@@ -43,7 +50,7 @@ export const TransportFilter: React.FC<Props> = ({
           />
           <SwapIconBtn shape="circle" icon={<SwapIcon />} />
           <InputStyled
-            name="to"
+            name={toField}
             $borderColor="green"
             placeholder="Куда"
             $paddingLeft="20px"
@@ -52,7 +59,7 @@ export const TransportFilter: React.FC<Props> = ({
           />
         </InputGroup>
         <DatePickerStyled
-          name="date"
+          name={dateField}
           placeholder="Дата погрузки"
           value={date ? dayjs(date) : ""}
           onChange={(date) => handleDatePickerChange(date)}
