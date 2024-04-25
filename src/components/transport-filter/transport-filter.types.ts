@@ -1,6 +1,8 @@
+import { FilterFields } from "./constants";
+
 export type FilterValuesType = {
-  from: string | null;
-  to: string | null;
-  transportationNumber: string | null;
-  date: string | null;
+  [FilterFields.from]: string | null;
+  [FilterFields.to]: string | null;
+  [FilterFields.transportationNumber]: string | null;
+  [FilterFields.date]: string | null;
 };

@@ -5,20 +5,27 @@ import styled from "styled-components";
 import dayjs from "dayjs";
 import { FilterValuesType } from "./transport-filter.types";
 import { FilterFields } from "./constants";
+import { FormikErrors } from "formik/dist/types";
 const { Title, Text } = Typography;
 
 type Props = {
-  handleSubmit: (e: React.FormEvent<HTMLFormElement> | undefined) => void;
-  handleChange: (e: React.ChangeEvent) => void;
-  handleDatePickerChange: (date: unknown) => void;
-  handleReset: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement> | undefined) => void;
+  onChange: (e: React.ChangeEvent) => void;
+  onDatePickerChange: (date: unknown) => void;
+  onReset: (e: React.FormEvent<HTMLFormElement>) => void;
+  setFieldValue: (
+    field: string,
+    value: unknown,
+    shouldValidate?: boolean,
+  ) => Promise<FormikErrors<FilterValuesType>> | Promise<void>;
   values: FilterValuesType;
 };
 export const TransportFilter: React.FC<Props> = ({
-  handleSubmit,
-  handleChange,
-  handleDatePickerChange,
-  handleReset,
+  onSubmit,
+  onChange,
+  onDatePickerChange,
+  onReset,
+  setFieldValue,
   values,
 }): React.ReactElement => {
   const { transportationNumber, from, to, date } = values;
@@ -29,15 +36,21 @@ export const TransportFilter: React.FC<Props> = ({
     date: dateField,
   } = FilterFields;
 
+  const handleSwap = () => {
+    const { from, to } = values;
+    setFieldValue(FilterFields.from, to);
+    setFieldValue(FilterFields.to, from);
+  };
+
   return (
     <Card>
-      <CardContent onSubmit={handleSubmit} onReset={handleReset}>
+      <CardContent onSubmit={onSubmit} onReset={onReset}>
         <TitleStyled level={4}>Поиск грузов</TitleStyled>
         <InputStyled
           name={transportNumField}
           placeholder="№ заказа"
           value={transportationNumber || ""}
-          onChange={handleChange}
+          onChange={onChange}
         />
 
         <InputGroup gap="small">
@@ -46,23 +59,27 @@ export const TransportFilter: React.FC<Props> = ({
             $borderColor="green"
             placeholder="Откуда"
             value={from || ""}
-            onChange={handleChange}
+            onChange={onChange}
           />
-          <SwapIconBtn shape="circle" icon={<SwapIcon />} />
+          <SwapIconBtn
+            shape="circle"
+            icon={<SwapIcon />}
+            onClick={handleSwap}
+          />
           <InputStyled
             name={toField}
             $borderColor="green"
             placeholder="Куда"
             $paddingLeft="20px"
             value={to || ""}
-            onChange={handleChange}
+            onChange={onChange}
           />
         </InputGroup>
         <DatePickerStyled
           name={dateField}
           placeholder="Дата погрузки"
           value={date ? dayjs(date) : ""}
-          onChange={(date) => handleDatePickerChange(date)}
+          onChange={(date) => onDatePickerChange(date)}
         />
 
         <Flex justify="flex-end">

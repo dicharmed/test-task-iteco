@@ -4,6 +4,7 @@ import { TransportFilter } from "../../../components/transport-filter/transport-
 
 import { useSearchParamsHook } from "../hooks/useSearchParamsHook";
 import { FilterValuesType } from "../../../components/transport-filter/transport-filter.types";
+import { FilterFields } from "../../../components/transport-filter/constants";
 
 export const TransportFilterContainer: React.FC = (): React.ReactElement => {
   const [params, setParams] = useSearchParamsHook();
@@ -24,10 +25,11 @@ export const TransportFilterContainer: React.FC = (): React.ReactElement => {
   return (
     <TransportFilter
       values={values}
-      handleSubmit={handleSubmit}
-      handleChange={handleChange}
-      handleReset={handleReset}
-      handleDatePickerChange={(date) => setFieldValue("date", date)}
+      onSubmit={handleSubmit}
+      onChange={handleChange}
+      onReset={handleReset}
+      setFieldValue={setFieldValue}
+      onDatePickerChange={(date) => setFieldValue(FilterFields.date, date)}
     />
   );
 };
