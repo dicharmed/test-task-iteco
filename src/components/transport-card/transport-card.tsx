@@ -16,9 +16,9 @@ export const TransportCard: React.FC<TransportationType> = ({
   price,
 }) => {
   return (
-    <Card>
+    <CardStyled>
       <Content>
-        <div style={{ textAlign: "left" }}>
+        <FirstColumn>
           <div>
             <TextStrong strong>{from?.country}</TextStrong>
             <Text type="secondary">{from?.city}</Text>
@@ -32,7 +32,7 @@ export const TransportCard: React.FC<TransportationType> = ({
             <TextStrong strong>{distance} км.</TextStrong>
             <Text type="success">+3 пункта</Text>
           </div>
-        </div>
+        </FirstColumn>
         <SecondColumn>
           <div style={{ textAlign: "left" }}>
             <Text>{transportationName}</Text>
@@ -54,18 +54,26 @@ export const TransportCard: React.FC<TransportationType> = ({
             </Text>
           </div>
         </SecondColumn>
-        <div style={{ paddingLeft: "24px" }}>
+        <ThirdColumn>
           <Text strong style={{ fontSize: "18px" }}>
             {price && getFormattedPrice(price)} ₽
           </Text>
           <Text type="secondary" style={{ display: "block" }}>
             ГСМ: {GSM && getFormattedPrice(GSM)} ₽
           </Text>
-        </div>
+        </ThirdColumn>
       </Content>
-    </Card>
+    </CardStyled>
   );
 };
+
+const CardStyled = styled(Card)`
+  @media screen and (max-width: 840px) {
+    .ant-card-body {
+      padding: 0 20px;
+    }
+  }
+`;
 
 const Content = styled("div")`
   display: grid;
@@ -75,14 +83,45 @@ const Content = styled("div")`
   & > div:not(:last-child) {
     border-right: 1px solid #e7e7e7;
   }
+
+  @media screen and (max-width: 840px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 107px) 1fr;
+
+    & > div:not(:last-child) {
+      border-right: none;
+      border-bottom: 1px solid #e7e7e7;
+    }
+  }
 `;
 
 const TextStrong = styled(Text)`
   margin-right: 7px;
 `;
 
+const FirstColumn = styled("div")`
+  text-align: left;
+
+  @media screen and (max-width: 840px) {
+    padding: 20px 0;
+    text-align: center;
+  }
+`;
+
 const SecondColumn = styled("div")`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   padding: 0 24px;
+
+  @media screen and (max-width: 840px) {
+    padding: 5px 0 20px;
+  }
+`;
+
+const ThirdColumn = styled("div")`
+  padding-left: 24px;
+
+  @media screen and (max-width: 840px) {
+    padding: 10px 0 20px;
+  }
 `;
