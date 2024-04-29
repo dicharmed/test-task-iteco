@@ -30,8 +30,8 @@ export const TransportFilter: React.FC<Props> = ({
   values,
 }): React.ReactElement => {
   const { transportationNumber, date } = values;
-  const [from, setFrom] = useState("");
-  const [to, setTo] = useState("");
+  const [from, setFrom] = useState(values.from || "");
+  const [to, setTo] = useState(values.to || "");
   const {
     from: fromField,
     to: toField,
@@ -40,13 +40,11 @@ export const TransportFilter: React.FC<Props> = ({
   } = FilterFields;
 
   const handleSwap = () => {
-    let temp = from;
+    const temp = from;
     setFrom(to);
     setTo(temp);
     setFieldValue(fromField, to);
     setFieldValue(toField, from);
-
-    console.log("from", from, "to", to);
   };
 
   const handleChange = (
