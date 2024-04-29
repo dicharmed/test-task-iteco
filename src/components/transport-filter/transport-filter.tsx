@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, DatePicker, Flex, Input, Typography } from "antd";
 import SwapIcon from "../../assets/swap-icon.svg?react";
 import styled from "styled-components";
 import dayjs from "dayjs";
-import { FilterValuesType } from "./transport-filter.types";
-import { FilterFields } from "./constants";
+import { FilterValuesType, OptionsType } from "./transport-filter.types";
+import { FilterFields, options } from "./constants";
 import { FormikErrors } from "formik/dist/types";
+import { AutocompleteCustom } from "../autocomplete/autocomplete";
 const { Title, Text } = Typography;
 
 type Props = {
@@ -28,7 +29,9 @@ export const TransportFilter: React.FC<Props> = ({
   setFieldValue,
   values,
 }): React.ReactElement => {
-  const { transportationNumber, from, to, date } = values;
+  const { transportationNumber, date } = values;
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
   const {
     from: fromField,
     to: toField,
@@ -37,14 +40,50 @@ export const TransportFilter: React.FC<Props> = ({
   } = FilterFields;
 
   const handleSwap = () => {
-    const { from, to } = values;
-    setFieldValue(FilterFields.from, to);
-    setFieldValue(FilterFields.to, from);
+    let temp = from;
+    setFrom(to);
+    setTo(temp);
+    setFieldValue(fromField, to);
+    setFieldValue(toField, from);
+
+    console.log("from", from, "to", to);
+  };
+
+  const handleChange = (
+    setField: React.Dispatch<React.SetStateAction<string>>,
+    field: FilterFields,
+    value: string,
+    option: OptionsType,
+  ) => {
+    const val = value ?? option.value;
+
+    if (val) {
+      setField(val);
+      setFieldValue(field, val);
+    }
+  };
+
+  const filterOptionFunc = (inputValue: string, option: OptionsType) =>
+    option!.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
+
+  const handleChangeFrom = (value: unknown, option: any) => {
+    handleChange(setFrom, fromField, value as string, option);
+  };
+  const handleChangeTo = (value: unknown, option: any) => {
+    handleChange(setTo, toField, value as string, option);
+  };
+
+  const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
+    onReset(e);
+    setFrom("");
+    setTo("");
+    setFieldValue(fromField, "");
+    setFieldValue(toField, "");
   };
 
   return (
     <Card>
-      <CardContent onSubmit={onSubmit} onReset={onReset}>
+      <CardContent onSubmit={onSubmit} onReset={handleReset}>
         <TitleStyled level={4}>Поиск грузов</TitleStyled>
         <InputStyled
           name={transportNumField}
@@ -54,26 +93,40 @@ export const TransportFilter: React.FC<Props> = ({
         />
 
         <InputGroup gap="small">
-          <InputStyled
-            name={fromField}
-            $borderColor="green"
-            placeholder="Откуда"
-            value={from || ""}
-            onChange={onChange}
-          />
+          <AutocompleteCustom
+            options={options}
+            filterOption={filterOptionFunc}
+            onChange={handleChangeFrom}
+            value={from}
+          >
+            <InputStyled
+              name={fromField}
+              $borderColor="green"
+              placeholder="Откуда"
+              value={from || ""}
+            />
+          </AutocompleteCustom>
+
           <SwapIconBtn
             shape="circle"
             icon={<SwapIcon />}
             onClick={handleSwap}
           />
-          <InputStyled
-            name={toField}
-            $borderColor="green"
-            placeholder="Куда"
-            $paddingLeft="20px"
-            value={to || ""}
-            onChange={onChange}
-          />
+
+          <AutocompleteCustom
+            options={options}
+            filterOption={filterOptionFunc}
+            onChange={handleChangeTo}
+            value={to}
+          >
+            <InputStyled
+              name={toField}
+              $borderColor="green"
+              placeholder="Куда"
+              $paddingLeft="20px"
+              value={to || ""}
+            />
+          </AutocompleteCustom>
         </InputGroup>
         <DatePickerStyled
           name={dateField}
@@ -139,7 +192,7 @@ const SwapIconBtn = styled(Button)`
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-57%, -50%);
+  transform: translate(-51%, -50%);
   z-index: 1;
 `;
 

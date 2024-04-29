@@ -6,3 +6,5 @@ export type FilterValuesType = {
   [FilterFields.transportationNumber]: string | null;
   [FilterFields.date]: string | null;
 };
+
+export type OptionsType = { value: string };

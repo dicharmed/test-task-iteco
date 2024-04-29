@@ -13,6 +13,7 @@ export const TransportFilterContainer: React.FC = (): React.ReactElement => {
     initialValues: params,
     onSubmit: (values) => {
       setParams(values);
+      console.log("values:", values);
     },
     onReset: () => {
       setParams({});
