@@ -1,11 +1,29 @@
 import dayjs from "dayjs";
-
+// import "dayjs/locale/ru.js";
+// dayjs.locale("ru");
 export const getFormattedPrice = (price: number) => {
   return new Intl.NumberFormat("ru-RU").format(price);
 };
 
 export const getFormattedDate = (date: string | Date, format?: string) => {
-  return dayjs(date).format(format ?? "MMM D, YYYY h:mm");
+  const formatted = dayjs(date).format(format ?? "D MMM YYYY");
+  return formatted;
+
+  // return date;
+};
+
+export const formatDateToDdMmYYYY = (
+  date: dayjs.Dayjs | null,
+): string | null => {
+  if (date) {
+    return date?.format("DD.MM.YYYY");
+  }
+
+  return null;
+};
+
+export const formatDateFromDdMmYYYY = (date: string): dayjs.Dayjs => {
+  return dayjs(date, "DD.MM.YYYY");
 };
 
 export const debounce = <F extends (...args: any[]) => any>(

@@ -14,13 +14,19 @@ class FakerApi {
     return faker.commerce.productName();
   }
   getTransportationNumber(): string {
-    return "№" + faker.string.alphanumeric(6);
+    return (
+      "№" +
+      faker.string.alphanumeric({
+        length: 6,
+        casing: "upper",
+      })
+    );
   }
   getDate(): Date {
     return faker.date.recent();
   }
   getDistance(): number {
-    return faker.number.float({ max: 100000, fractionDigits: 1 });
+    return faker.number.float({ max: 500, fractionDigits: 1 });
   }
   getPrice(): number {
     return faker.number.int({ min: 10000, max: 1000000 });

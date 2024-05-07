@@ -5,6 +5,7 @@ import { TransportFilter } from "../../../components/transport-filter/transport-
 import { useSearchParamsHook } from "../hooks/useSearchParamsHook";
 import { FilterValuesType } from "../../../components/transport-filter/transport-filter.types";
 import { FilterFields } from "../../../components/transport-filter/constants";
+import { formatDateToDdMmYYYY } from "../../../utils";
 
 export const TransportFilterContainer: React.FC = (): React.ReactElement => {
   const [params, setParams] = useSearchParamsHook();
@@ -12,8 +13,7 @@ export const TransportFilterContainer: React.FC = (): React.ReactElement => {
   const formik = useFormik<FilterValuesType>({
     initialValues: params,
     onSubmit: (values) => {
-      setParams(values);
-      console.log("values:", values);
+      setParams({ ...values, date: formatDateToDdMmYYYY(values.date) });
     },
     onReset: () => {
       setParams({});

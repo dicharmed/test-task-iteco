@@ -1,12 +1,13 @@
 import { useSearchParams } from "react-router-dom";
 
-import { getFormattedDate } from "../../../utils";
 import { FilterValuesType } from "../../../components/transport-filter/transport-filter.types";
 import { FilterFields } from "../../../components/transport-filter/constants";
+import { formatDateFromDdMmYYYY } from "../../../utils";
+import { TransportPageParams } from "../transport-page.types";
 
 type UseSearchParamsHookReturn = [
   FilterValuesType,
-  (values: Partial<FilterValuesType>) => void,
+  (values: Partial<TransportPageParams>) => void,
 ];
 
 export const useSearchParamsHook = (): UseSearchParamsHookReturn => {
@@ -24,13 +25,17 @@ export const useSearchParamsHook = (): UseSearchParamsHookReturn => {
   const transportationNumber = searchParams.get(transportNumField);
   const date = searchParams.get(dateField);
 
-  const params: FilterValuesType = { from, to, transportationNumber, date };
+  const params: FilterValuesType = {
+    from,
+    to,
+    transportationNumber,
+    date: date ? formatDateFromDdMmYYYY(date) : null,
+  };
 
-  const changeSearchParams = (values: Partial<FilterValuesType>): void => {
+  const changeSearchParams = (values: Partial<TransportPageParams>): void => {
     const newSearchParams = new URLSearchParams();
 
     Object.entries(values).forEach(([key, value]) => {
-      if (key === dateField) value = value ? getFormattedDate(value) : value;
       if (value) {
         newSearchParams.set(key, value);
       }
